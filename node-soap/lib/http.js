@@ -10,7 +10,8 @@ var req = require('request');
 var httpntlm = require('httpntlm');
 var _ = require('lodash');
 
-var VERSION = require('../package.json').version;
+// var VERSION = require('../package.json').version;
+var VERSION = '0.6.3';
 
 exports.request = function(rurl, data, callback, exheaders, exoptions) {
   var method = data ? "post" : "get";
