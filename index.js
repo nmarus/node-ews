@@ -1,1 +1,1 @@
-require('./bin/ews');
+module.exports = require('./lib/ews');

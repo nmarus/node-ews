@@ -1,8 +1,8 @@
 {
   "name": "node-ews",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A simple JSON wrapper for the Exchange Web Services (EWS) SOAP API",
-  "main": "index.js",
+  "main": "./index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,9 +18,6 @@
     "strip-bom": "~0.3.1",
     "tmp": "0.0.28",
     "xml2js": "^0.4.16"
-  },
-  "bin": {
-    "node-ews": "./bin/ews.js"
   },
   "repository": {
     "type": "git",
