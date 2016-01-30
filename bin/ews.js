@@ -145,8 +145,6 @@ EWS.prototype.get = function(ewsFunction, ewsArgs, callback) {
                 if(err) {
                   cb(err, null);
                 } else {
-                  // var requestResult = result['Envelope']['Body'][0]['ExpandDLResponse'][0]['ResponseMessages'][0]['ExpandDLResponseMessage'][0]['DLExpansion'][0]['Mailbox'];
-                  // console.log(requestResult);
                   cb(err, result);
                 }
               });
