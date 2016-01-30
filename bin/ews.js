@@ -38,7 +38,8 @@ EWS.prototype.auth = function(username, password, ewsHost) {
   ];
 };
 
-EWS.prototype.get = function(ewsFunction, ewsArgs, callback) {
+// run ews function with args
+EWS.prototype.run = function(ewsFunction, ewsArgs, callback) {
 
   var $this = this;
 
