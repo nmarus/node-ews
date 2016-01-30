@@ -23,7 +23,7 @@ A collobberation of node-soap and httpntlm wrapped up with some modifications to
 #### Example 1: Get Exchange Distribution List Members Using ExpandDL
 ###### https://msdn.microsoft.com/EN-US/library/office/aa564755.aspx
 ```js
-var ews = require('./node-ews');
+var ews = require('node-ews');
 var _ = require('lodash');
 
 // exchange server connection info
