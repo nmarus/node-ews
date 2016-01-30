@@ -1,0 +1,22 @@
+{
+  "name": "node-ews",
+  "version": "1.0.0",
+  "description": "A simple JSON wrapper for the Exchange Web Services (EWS) SOAP API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nicholas Marus",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "httpntlm": "^1.5.2",
+    "lodash": "^4.0.1",
+    "request": ">=2.9.0",
+    "sax": ">=0.6",
+    "selectn": "^0.9.6",
+    "strip-bom": "~0.3.1",
+    "tmp": "0.0.28",
+    "xml2js": "^0.4.16"
+  }
+}
