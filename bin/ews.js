@@ -96,9 +96,9 @@ EWS.prototype.get = function(ewsFunction, ewsArgs, callback) {
     },
     function(cb) {
       //
-      // fix non ms wdsl...
+      // fix ms wdsl...
       //
-      // https://msdn.microsoft.com/en-us/library/office/aa580675(v=exchg.150).aspx
+      // https://msdn.microsoft.com/en-us/library/office/aa580675.aspx
       // The EWS WSDL file, services.wsdl, does not fully conform to the WSDL standard
       // because it does not include a WSDL service definition. This is because EWS is
       // not designed to be hosted on a computer that has a predefined address.
