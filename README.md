@@ -6,29 +6,23 @@ npm install node-ews
 ```
 
 #### About
-A collobberation of node-soap and httpntlm wrapped up with some modifications to make queries to Microsoft's Exchange Web Service API work. I'm actually surprised this works...
+A combination of node-soap and httpntlm wrapped up with some modifications to make queries to Microsoft's Exchange Web Service API work.
 
 ##### Features:
 - Assumes NTLM Authentication over HTTPs
-- Connects to configured EWS Host and downloads appropriate wsdl file so it might be concluded that this is "fairly" version agnostic
-- Dynamically exposes all EWS SOAP functions in the downloaded wsdl file
-- Attempts to standardize Microsoft's wsdl by modifying the file to include missing components
-
-##### Known Issues / Limits / TODOs:
-- Depends on a modified fork of the soap-ntlm fork of node-soap. This is located in this repository.
-- Returned json requires a lot of parsing. Probably can be optimized to remove common parent elements to the EWS responses or dynamically filter based on query.
-- Outside of the example below, nothing has been tested (aka "production ready!")
+- Connects to configured EWS Host and downloads it's wsdl file so it might be concluded that this is "fairly" version agnostic
+- After downloading the wsdl file, the wrapper dynamically exposes all EWS SOAP functions
+- Attempts to standardize Microsoft's wsdl by modifying the file to include missing service name, port, and bindings
 
 #### Example 1: Get Exchange Distribution List Members Using ExpandDL
 ###### https://msdn.microsoft.com/EN-US/library/office/aa564755.aspx
 ```js
 var ews = require('node-ews');
-var _ = require('lodash');
 
 // exchange server connection info
 var username = 'myuser@domain.com';
 var password = 'mypassword';
-var ewsHost = 'ews.domain.com';
+var host = 'ews.domain.com';
 
 // exchange ews query on Public Distribution List by email
 var ewsFunction = 'ExpandDL';
@@ -39,16 +33,16 @@ var ewsArgs = {
 };
 
 // setup authentication
-ews.auth(username, password, ewsHost);
+ews.auth(username, password, host);
 
-// query ews
+// query ews, print resulting JSON to console
 ews.run(ewsFunction, ewsArgs, function(err, result) {
-  if(err) throw err;
-
-  // parse JSON results to dump email addresses for DL to console
-  var requestResult = result['Envelope']['Body'][0]['ExpandDLResponse'][0]['ResponseMessages'][0]['ExpandDLResponseMessage'][0]['DLExpansion'][0]['Mailbox'];
-  _.map(requestResult, 'EmailAddress').forEach(function(x) {
-    console.log(x[0]);
-  });
+  if(!err) console.log(JSON.stringify(result));
 });
 ````
+
+#### Known Issues / Limits / TODOs:
+- Depends on a modified fork of the soap-ntlm fork of node-soap. a node-soap auth plugin is not possible due to the nature of NTLM. This is located in this repository.
+- Returned json requires a lot of parsing. Probably can be optimized to remove common parent elements to the EWS responses or dynamically filter based on query.
+- Outside of the example below, nothing has been tested (aka "It's production ready!")
+- Temp file cleanup logic needs to be validated to ensure file cleanup after process exit or object destruction
