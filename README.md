@@ -16,7 +16,6 @@ A collobberation of node-soap and httpntlm wrapped up with some modifications to
 
 ##### Known Issues / Limits / TODOs:
 - Depends on a modified fork of the soap-ntlm fork of node-soap. This is located in this repository.
-- Downloads to temporary location the wsdl and xsd files on each call of ews.run()
 - Returned json requires a lot of parsing. Probably can be optimized to remove common parent elements to the EWS responses or dynamically filter based on query.
 - Outside of the example below, nothing has been tested (aka "production ready!")
 
