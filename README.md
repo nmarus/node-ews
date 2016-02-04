@@ -42,7 +42,7 @@ ews.run(ewsFunction, ewsArgs, function(err, result) {
 ````
 
 #### Known Issues / Limits / TODOs:
-- Depends on a modified fork of the soap-ntlm fork of node-soap. a node-soap auth plugin is not possible due to the nature of NTLM. This is located in this repository.
+- Depends on a modified fork of the soap-ntlm fork of node-soap. A node-soap auth plugin is not possible due to the nature of NTLM. This is located in this repository.
 - Returned json requires a lot of parsing. Probably can be optimized to remove common parent elements to the EWS responses or dynamically filter based on query.
 - Outside of the example below, nothing has been tested (aka "It's production ready!")
 - Temp file cleanup logic needs to be validated to ensure file cleanup after process exit or object destruction
