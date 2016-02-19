@@ -6,7 +6,7 @@ npm install node-ews
 ```
 
 #### About
-A combination of node-soap and httpntlm wrapped up with some modifications to make queries to Microsoft's Exchange Web Service API work.
+A extension of node-soap with httpntlm to make queries to Microsoft's Exchange Web Service API work.
 
 ##### Features:
 - Assumes NTLM Authentication over HTTPs
@@ -42,7 +42,6 @@ ews.run(ewsFunction, ewsArgs, function(err, result) {
 ````
 
 #### Known Issues / Limits / TODOs:
-- Depends on a modified fork of the soap-ntlm fork of node-soap. A node-soap auth plugin is not possible due to the nature of NTLM. This is located in this repository.
 - Returned json requires a lot of parsing. Probably can be optimized to remove common parent elements to the EWS responses or dynamically filter based on query.
-- Outside of the example below, nothing has been tested (aka "It's production ready!")
+- Outside of the example above, nothing has been tested (aka "It's production ready!")
 - Temp file cleanup logic needs to be validated to ensure file cleanup after process exit or object destruction
