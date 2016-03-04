@@ -32,6 +32,9 @@ var ewsArgs = {
   }
 };
 
+// ignore ssl verification (optional)
+ews.ignoreSSL = true;
+
 // setup authentication
 ews.auth(username, password, host);
 
