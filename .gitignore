@@ -8,3 +8,6 @@ Desktop.ini
 
 # NPM
 node_modules
+
+# IDEs
+.idea
