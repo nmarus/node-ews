@@ -44,6 +44,55 @@ ews.run(ewsFunction, ewsArgs, function(err, result) {
 });
 ````
 
+#### Custom Soap Headers
+```js
+ews.run('FindItem', {
+  body: {
+    attributes: {
+      Traversal: 'Shallow'
+    },
+    ItemShape: {
+      BaseShape: 'IdOnly',
+      AdditionalProperties: {
+        FieldURI: {
+          attributes: {
+            FieldURI: 'item:Subject'
+          }
+        }
+      }
+    },
+    CalendarView: {
+      attributes: {
+        MaxEntriesReturned: 10,
+        StartDate: '2016-01-01T00:00:00Z',
+        EndDate: '2016-12-31T00:00:00Z'
+      }
+    },
+    ParentFolderIds: {
+      DistinguishedFolderId: {
+        attributes: {
+          Id: 'calendar'
+        }
+      }
+    }
+  },
+  headers: {
+    'http://schemas.microsoft.com/exchange/services/2006/types': [{
+      RequestServerVersion: {
+        attributes: {
+          Version: 'Exchange2010'
+        }
+      },
+      ExchangeImpersonation: {
+        ConnectingSID: {
+          SmtpAddress: '...'
+        }
+      }
+    }]
+  }
+}, function(err, result) {});
+```
+
 #### Known Issues / Limits / TODOs:
 - Returned json requires a lot of parsing. Probably can be optimized to remove common parent elements to the EWS responses or dynamically filter based on query.
 - Outside of the example above, nothing has been tested (aka "It's production ready!")
