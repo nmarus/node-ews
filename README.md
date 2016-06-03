@@ -93,6 +93,15 @@ ews.run('FindItem', {
 }, function(err, result) {});
 ```
 
+#### Specifying XML processors
+You can specify the XML processors you want to use when parsing the response. If you are seeing what should be Date/Times having values like '00Z', disable the stripPrefix processor that is run by default on the XML value by specifying:
+```
+ews.processors: {
+  valueProcessors: null
+}
+```
+Alternatively you can pass in an array of functions which will be merged with the default stripPrefix processor. Details can be found at the [node-xml2js](https://github.com/Leonidas-from-XIV/node-xml2js#processing-attribute-tag-names-and-values)
+
 #### Known Issues / Limits / TODOs:
 - Returned json requires a lot of parsing. Probably can be optimized to remove common parent elements to the EWS responses or dynamically filter based on query.
 - Outside of the example above, nothing has been tested (aka "It's production ready!")
