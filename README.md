@@ -13,6 +13,7 @@ A extension of node-soap with httpntlm to make queries to Microsoft's Exchange W
 - Connects to configured EWS Host and downloads it's wsdl file so it might be concluded that this is "fairly" version agnostic
 - After downloading the wsdl file, the wrapper dynamically exposes all EWS SOAP functions
 - Attempts to standardize Microsoft's wsdl by modifying the file to include missing service name, port, and bindings
+- This DOES NOT work with anything Microsoft Documents as using the EWS Managed API.
 
 #### Example 1: Get Exchange Distribution List Members Using ExpandDL
 ###### https://msdn.microsoft.com/EN-US/library/office/aa564755.aspx
@@ -50,4 +51,52 @@ ews.run(ewsFunction, ewsArgs)
     console.log(err.message);
   });
 
-````
+```
+
+#### Example 2: Setting OOO Using SetUserOofSettings
+###### https://msdn.microsoft.com/en-us/library/office/aa580294.aspx
+```js
+var EWS = require('node-ews');
+
+// exchange server connection info
+var username = 'myuser@domain.com';
+var password = 'mypassword';
+var host = 'https://ews.domain.com';
+
+var options = {
+  // rejectUnauthorized: false,
+  // strictSSL: false
+};
+
+// initialize node-ews
+var ews = new EWS(username, password, host, options);
+
+var ewsFunction = 'SetUserOofSettings';
+var ewsArgs = {
+  'Mailbox': {
+    'Address':'email@somedomain.com'
+  },
+  'UserOofSettings': {
+    'OofState':'Enabled',
+    'ExternalAudience':'All',
+    'Duration': {
+      'StartTime':'2016-08-22T00:00:00',
+      'EndTime':'2016-08-23T00:00:00'
+    },
+    'InternalReply': {
+      'Message':'I am out of office.  This is my internal reply.'
+    },
+    'ExternalReply': {
+      'Message':'I am out of office. This is my external reply.'
+    }
+  }
+};
+
+// query ews, print resulting JSON to console
+ews.run(ewsFunction, ewsArgs)
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(err => {
+    console.log(err.stack);
+  });
