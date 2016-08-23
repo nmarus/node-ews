@@ -5,6 +5,15 @@
 npm install node-ews
 ```
 
+#### Updates in version 2.0.x
+
+- Removed xml2js dependancy and using XML parser built into soap library
+- Removed async dependancy and library now returns promises
+- Changed constructor setup
+- Added optional "options" to constructor that is passed to soap library
+- Host config now allows specifying http or https urls
+- Replaced customized ntlm library with httpntlm
+
 #### About
 A extension of node-soap with httpntlm to make queries to Microsoft's Exchange Web Service API work.
 
@@ -13,18 +22,28 @@ A extension of node-soap with httpntlm to make queries to Microsoft's Exchange W
 - Connects to configured EWS Host and downloads it's wsdl file so it might be concluded that this is "fairly" version agnostic
 - After downloading the wsdl file, the wrapper dynamically exposes all EWS SOAP functions
 - Attempts to standardize Microsoft's wsdl by modifying the file to include missing service name, port, and bindings
+- This DOES NOT work with anything Microsoft Documents as using the EWS Managed API.
 
 #### Example 1: Get Exchange Distribution List Members Using ExpandDL
 ###### https://msdn.microsoft.com/EN-US/library/office/aa564755.aspx
 ```js
-var ews = require('node-ews');
+var EWS = require('node-ews');
 
 // exchange server connection info
 var username = 'myuser@domain.com';
 var password = 'mypassword';
-var host = 'ews.domain.com';
+var host = 'https://ews.domain.com';
 
-// exchange ews query on Public Distribution List by email
+// disable ssl verification
+var options = {
+//  rejectUnauthorized: false,
+//  strictSSL: false
+};
+
+// initialize node-ews
+var ews = new EWS(username, password, host, options);
+
+// define a ews query on Public Distribution List by email
 var ewsFunction = 'ExpandDL';
 var ewsArgs = {
   'Mailbox': {
@@ -32,77 +51,61 @@ var ewsArgs = {
   }
 };
 
-// ignore ssl verification (optional)
-ews.ignoreSSL = true;
+// query ews, print resulting JSON to console
+ews.run(ewsFunction, ewsArgs)
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(err => {
+    console.log(err.message);
+  });
 
-// setup authentication
-ews.auth(username, password, host);
+```
+
+#### Example 2: Setting OOO Using SetUserOofSettings
+###### https://msdn.microsoft.com/en-us/library/office/aa580294.aspx
+```js
+var EWS = require('node-ews');
+
+// exchange server connection info
+var username = 'myuser@domain.com';
+var password = 'mypassword';
+var host = 'https://ews.domain.com';
+
+var options = {
+  // rejectUnauthorized: false,
+  // strictSSL: false
+};
+
+// initialize node-ews
+var ews = new EWS(username, password, host, options);
+
+var ewsFunction = 'SetUserOofSettings';
+var ewsArgs = {
+  'Mailbox': {
+    'Address':'email@somedomain.com'
+  },
+  'UserOofSettings': {
+    'OofState':'Enabled',
+    'ExternalAudience':'All',
+    'Duration': {
+      'StartTime':'2016-08-22T00:00:00',
+      'EndTime':'2016-08-23T00:00:00'
+    },
+    'InternalReply': {
+      'Message':'I am out of office.  This is my internal reply.'
+    },
+    'ExternalReply': {
+      'Message':'I am out of office. This is my external reply.'
+    }
+  }
+};
 
 // query ews, print resulting JSON to console
-ews.run(ewsFunction, ewsArgs, function(err, result) {
-  if(!err) console.log(JSON.stringify(result));
-});
-````
-
-#### Custom Soap Headers
-```js
-ews.run('FindItem', {
-  body: {
-    attributes: {
-      Traversal: 'Shallow'
-    },
-    ItemShape: {
-      BaseShape: 'IdOnly',
-      AdditionalProperties: {
-        FieldURI: {
-          attributes: {
-            FieldURI: 'item:Subject'
-          }
-        }
-      }
-    },
-    CalendarView: {
-      attributes: {
-        MaxEntriesReturned: 10,
-        StartDate: '2016-01-01T00:00:00Z',
-        EndDate: '2016-12-31T00:00:00Z'
-      }
-    },
-    ParentFolderIds: {
-      DistinguishedFolderId: {
-        attributes: {
-          Id: 'calendar'
-        }
-      }
-    }
-  },
-  headers: {
-    'http://schemas.microsoft.com/exchange/services/2006/types': [{
-      RequestServerVersion: {
-        attributes: {
-          Version: 'Exchange2010'
-        }
-      },
-      ExchangeImpersonation: {
-        ConnectingSID: {
-          SmtpAddress: '...'
-        }
-      }
-    }]
-  }
-}, function(err, result) {});
-```
-
-#### Specifying XML processors
-You can specify the XML processors you want to use when parsing the response. If you are seeing what should be Date/Times having values like '00Z', disable the stripPrefix processor that is run by default on the XML value by specifying:
-```
-ews.processors: {
-  valueProcessors: null
-}
-```
-Alternatively you can pass in an array of functions which will be merged with the default stripPrefix processor. Details can be found at the [node-xml2js](https://github.com/Leonidas-from-XIV/node-xml2js#processing-attribute-tag-names-and-values)
-
-#### Known Issues / Limits / TODOs:
-- Returned json requires a lot of parsing. Probably can be optimized to remove common parent elements to the EWS responses or dynamically filter based on query.
-- Outside of the example above, nothing has been tested (aka "It's production ready!")
-- Temp file cleanup logic needs to be validated to ensure file cleanup after process exit or object destruction
+ews.run(ewsFunction, ewsArgs)
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(err => {
+    console.log(err.stack);
+  });
