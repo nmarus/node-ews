@@ -5,6 +5,15 @@
 npm install node-ews
 ```
 
+#### Updates in version 2.0.x
+
+- Removed xml2js dependancy and using XML parser built into soap library
+- Removed async dependancy and library now returns promises
+- Changed constructor setup
+- Added optional "options" to constructor that is passed to soap library
+- Host config now allows specifying http or https urls
+- Replaced customized ntlm library with httpntlm
+
 #### About
 A extension of node-soap with httpntlm to make queries to Microsoft's Exchange Web Service API work.
 
