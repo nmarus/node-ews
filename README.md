@@ -271,12 +271,12 @@ var xml = '<?xml version="1.0" encoding="utf-8"?>' +
   '</soap:Envelope>';
 
 convert(xml).then(json => {
-  console.log(util.inspect(json, false, null));
+  console.log('ewsArgs = ' + util.inspect(json, false, null));
 });
 
 // console output ready for ewsArgs
 
-// { attributes: { Traversal: 'Shallow' },
+// ewsArgs = { attributes: { Traversal: 'Shallow' },
 //   ItemShape: { BaseShape: 'IdOnly' },
 //   ParentFolderIds: { DistinguishedFolderId: { attributes: { Id: 'deleteditems' } } } }
 ```
