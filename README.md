@@ -14,7 +14,7 @@ npm install node-ews
 - Host config now allows specifying http or https urls
 - Replaced customized ntlm library with httpntlm
 
-#### Updates in version 2.0.1
+#### Updates in version 2.1.0
 
 - Added the ability to specify the directory where XSD and WSDL files are stored
 - Added authentication error handling
