@@ -210,7 +210,7 @@ It is important to note the structure of the request. Items such as "BaseShape" 
 
 However, "DistinguishedFolderId" has no closing tag and you must specify an ID. Rather than a direct child object, you must use the JSON child object "attributes".
 
-**Alternatively you can create something like this to convert the EWS Soap Query to a SOAP JSON query**
+**Alternatively you can create something like this to convert the EWS Soap Query to a SOAP JSON query:**
 
 ```js
 var xml2js = require('xml2js');
