@@ -1,6 +1,6 @@
 {
   "name": "node-ews",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "A simple JSON wrapper for the Exchange Web Services (EWS) SOAP API",
   "main": "./index.js",
   "scripts": {
