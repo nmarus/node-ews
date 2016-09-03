@@ -209,3 +209,74 @@ The equivalent JSON Request for node-ews (ewsArgs) would be:
 It is important to note the structure of the request. Items such as "BaseShape" are children of their parent element. In this case it is "ItemShape". In regards "BaseShape" it is enclosed between an opening and closing tag so it is defined as a direct clid of "ItemShape".
 
 However, "DistinguishedFolderId" has no closing tag and you must specify an ID. Rather than a direct child object, you must use the JSON child object "attributes".
+
+** Alternatively you can create something like this to convert the EWS Soap Query to a SOAP JSON query **
+
+```js
+var xml2js = require('xml2js');
+var when = require('when');
+var _ = require('lodash');
+
+var util = require('util');
+
+function convert(xml) {
+
+  var attrkey = 'attributes';
+
+  var parser = new xml2js.Parser({
+    attrkey: attrkey,
+    trim: true,
+    ignoreAttrs: false,
+    explicitRoot: false,
+    explicitCharkey: false,
+    explicitArray: false,
+    explicitChildren: false,
+    tagNameProcessors: [
+      function(tag) {
+        return tag.replace('t:', '');
+      }
+    ]
+  });
+
+  return when.promise((resolve, reject) => {
+    parser.parseString(xml, (err, result) => {
+      if(err) reject(err);
+      else {
+        var ewsFunction = _.keys(result['soap:Body'])[0];
+        var parsed = result['soap:Body'][ewsFunction];
+        parsed[attrkey] = _.omit(parsed[attrkey], ['xmlns', 'xmlns:t']);
+        if(_.isEmpty(parsed[attrkey])) parsed = _.omit(parsed, [attrkey]);
+        resolve(parsed);
+      }
+    });
+  });
+
+}
+
+var xml = '<?xml version="1.0" encoding="utf-8"?>' +
+  '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" ' +
+                 'xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
+    '<soap:Body>' +
+      '<FindItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages" ' +
+                'xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types" ' +
+                'Traversal="Shallow">' +
+        '<ItemShape>' +
+          '<t:BaseShape>IdOnly</t:BaseShape>' +
+        '</ItemShape>' +
+        '<ParentFolderIds>' +
+          '<t:DistinguishedFolderId Id="deleteditems"/>' +
+        '</ParentFolderIds>' +
+      '</FindItem>' +
+    '</soap:Body>' +
+  '</soap:Envelope>';
+
+convert(xml).then(json => {
+  console.log(util.inspect(json, false, null));
+});
+
+// console output ready for ewsArgs
+
+// { attributes: { Traversal: 'Shallow' },
+//   ItemShape: { BaseShape: 'IdOnly' },
+//   ParentFolderIds: { DistinguishedFolderId: { attributes: { Id: 'deleteditems' } } } }
+```
