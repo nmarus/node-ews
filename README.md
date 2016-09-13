@@ -169,7 +169,7 @@ var ewsSoapHeader = {
 };
 
 // query ews, print resulting JSON to console
-ews.run(ewsFunction, ewsArgs, ewsSoapheader)
+ews.run(ewsFunction, ewsArgs, ewsSoapHeader)
   .then(result => {
     console.log(JSON.stringify(result));
   })
