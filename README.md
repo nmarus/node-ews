@@ -139,6 +139,46 @@ ews.run(ewsFunction, ewsArgs)
 
 ### Advanced Options
 
+#### Adding Optional Soap Headers
+
+To add an optional soap header to the Exchange Web Services request, you can pass an optional 3rd variable to the ews.run() function as demonstrated by the following:
+
+```js
+var EWS = require('node-ews');
+
+// exchange server connection info
+var username = 'myuser@domain.com';
+var password = 'mypassword';
+var host = 'https://ews.domain.com';
+
+// initialize node-ews
+var ews = new EWS(username, password, host);
+
+var ewsFunction = 'GetUserOofSettings';
+var ewsArgs = {
+  'Mailbox': {
+    'Address':'email@somedomain.com'
+  }
+};
+var ewsSoapHeader = {
+  't:RequestServerVersion': {
+    attributes: {
+      Version: "Exchange2013"
+    }
+  }
+};
+
+// query ews, print resulting JSON to console
+ews.run(ewsFunction, ewsArgs, ewsSoapheader)
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(err => {
+    console.log(err.stack);
+  });
+
+```
+
 #### Disable SSL verification:
 
 To disable SSL authentication modify the above examples with the following:
