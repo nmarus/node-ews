@@ -9,8 +9,9 @@
   "author": "Nicholas Marus",
   "license": "MIT",
   "dependencies": {
-    "httpntlm": "1.6.1",
-    "lodash": "4.14.1",
+    "httpntlm": "1.7.3",
+    "lodash": "4.17.2",
+    "request": "2.79.0",
     "soap": "^0.17.0",
     "tmp": "0.0.28",
     "when": "3.7.7"
@@ -23,6 +24,7 @@
     "node",
     "ews",
     "exchange",
+    "office365",
     "web",
     "services",
     "api",
