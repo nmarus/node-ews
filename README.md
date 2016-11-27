@@ -23,7 +23,7 @@ npm install node-ews
 A extension of node-soap with httpntlm to make queries to Microsoft's Exchange Web Service API work.
 
 ##### Features:
-- Assumes NTLM Authentication over HTTPs (basic auth not currently supported)
+- Assumes NTLM Authentication over HTTPs (basic auth **now** supported)
 - Connects to configured EWS Host and downloads it's WSDL file so it might be concluded that this is "fairly" version agnostic
 - After downloading the  WSDL file, the wrapper dynamically exposes all EWS SOAP functions
 - Attempts to standardize Microsoft's  WSDL by modifying the file to include missing service name, port, and bindings
