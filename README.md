@@ -5,7 +5,11 @@
 npm install node-ews
 ```
 
-#### Updates in version 3.0.0 (new)
+#### Updates in patch 3.0.1 (new)
+
+- Applied temporary fix for Issue #17 by pointing node-soap reference in package.json to modified fork.
+
+#### Updates in version 3.0.0
 
 - Resolved issue #31 (courtesy of @eino-makitalo)
 - Resolved issue #29
@@ -131,6 +135,67 @@ var ewsFunction = 'GetUserOofSettings';
 var ewsArgs = {
   'Mailbox': {
     'Address':'email@somedomain.com'
+  }
+};
+
+// query ews, print resulting JSON to console
+ews.run(ewsFunction, ewsArgs)
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(err => {
+    console.log(err.stack);
+  });
+```
+
+#### Example 4: Sending Email (version 3.0.1 required to avoid issue #17)
+##### https://msdn.microsoft.com/en-us/library/office/aa566468
+
+```js
+var EWS = require('node-ews');
+
+// exchange server connection info
+var ewsConfig = {
+  username: 'myuser@domain.com',
+  password: 'mypassword',
+  host: 'https://ews.domain.com'
+};
+
+// initialize node-ews
+var ews = new EWS(ewsConfig);
+
+// define ews api function
+var ewsFunction = 'CreateItem';
+
+// define ews api function args
+var ewsArgs = {
+  "attributes" : {
+    "MessageDisposition" : "SendAndSaveCopy"
+  },
+  "SavedItemFolderId": {
+    "DistinguishedFolderId": {
+      "attributes": {
+        "Id": "sentitems"
+      }
+    }
+  },
+  "Items" : {
+    "Message" : {
+      "ItemClass": "IPM.Note",
+      "Subject" : "Test EWS Email",
+      "Body" : {
+        "attributes": {
+          "BodyType" : "Text"
+        },
+        "$value": "This is a test email"
+      },
+      "ToRecipients" : {
+        "Mailbox" : {
+          "EmailAddress" : "someone@gmail.com"
+        }
+      },
+      "IsRead": "false"
+    }
   }
 };
 
