@@ -12,7 +12,7 @@
     "httpntlm": "1.7.3",
     "lodash": "4.17.2",
     "request": "2.79.0",
-    "soap": "git://github.com/nmarus/node-soap.git",
+    "soap": "https://github.com/nmarus/node-soap/tarball/master",
     "tmp": "0.0.28",
     "when": "3.7.7"
   },
