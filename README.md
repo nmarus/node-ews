@@ -4,7 +4,9 @@
 ```
 npm install node-ews
 ```
-#### Updates in patch 3.0.3 (new)
+#### Updates in patch 3.0.6 (new)
+- Addressed issues in PR #38, cleaned up code.
+- Merged PR for issues #37
 - Merged PR for issues #36 to fix typo in 3.0.2
 - Merged PR for issues #34 to fix typo in 3.0.1
 - Applied temporary fix for Issue #17 by pointing node-soap reference in package.json to modified fork.
