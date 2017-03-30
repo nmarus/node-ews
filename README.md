@@ -6,7 +6,7 @@ npm install node-ews
 ```
 
 #### Updates in patch 3.1.0 (new)
-- Merged PR #47 to add support for bearer auth.
+- Merged PR #46 to add support for bearer auth.
 
 #### Updates in patch 3.0.6
 - Addressed issues in PR #38, cleaned up code.
