@@ -25,7 +25,7 @@ npm install node-ews
 A extension of node-soap with httpntlm to make queries to Microsoft's Exchange Web Service API work.
 
 ##### Features:
-- Assumes NTLM Authentication over HTTPs (basic auth **now** supported)
+- Assumes NTLM Authentication over HTTPs (basic and bearer auth **now** supported)
 - Connects to configured EWS Host and downloads it's WSDL file so it might be concluded that this is "fairly" version agnostic
 - After downloading the  WSDL file, the wrapper dynamically exposes all EWS SOAP functions
 - Attempts to standardize Microsoft's  WSDL by modifying the file to include missing service name, port, and bindings
@@ -313,11 +313,26 @@ var ewsConfig = {
 var ews = new EWS(ewsConfig);
 ```
 
+#### Enable Bearer Auth instead of NTLM:
+
+```js
+// exchange server connection info
+var ewsConfig = {
+  username: 'myuser@domain.com',
+  token: 'oauth_token...',
+  host: 'https://ews.domain.com',
+  auth: 'bearer'
+};
+
+// initialize node-ews
+var ews = new EWS(ewsConfig);
+```
+
 #### Disable SSL verification:
 
 To disable SSL authentication modify the above examples with the following:
 
-**Basic Auth**
+**Basic and Bearer Auth**
 
 ```js
 var options = {
