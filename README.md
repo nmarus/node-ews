@@ -229,22 +229,38 @@ ews.notificationService(serviceOptions, function(response){
 	console.log(new Date().toISOString(),"| Received EWS Push Notification");
 	console.log(new Date().toISOString(),"| Response:",JSON.stringify(response));
 	//Do something with response
-	return {SendNotificationResult:{SubscriptionStatus:"OK"}};
-	//return {SendNotificationResult:{SubscriptionStatus:"UNSUBSCRIBE"}};
+	return {SendNotificationResult:{SubscriptionStatus:"OK"}}; // respond with "OK" to keep subscription alive
+	//return {SendNotificationResult:{SubscriptionStatus:"UNSUBSCRIBE"}}; // respond with "UNSUBSCRIBE" to unsubscribe
 })
-// the soap.listener is passed back through the promise so you can use the .log functionality
+
+// the soap.listen object is passed through the promise so you can optionally use the .log() functionality
+// https://github.com/vpulim/node-soap#server-logging
 .then(server => {
 	server.log = function(type, data) {
 		console.log(new Date().toISOString(),"| ",type,':',data);
 	};
 });
+
 // create a push notification subscription
-ews("Subscribe",{PushSubscriptionRequest:{
-	FolderIds:{DistinguishedFolderId:{attributes:{Id:"inbox"}}},
-	EventTypes:{"EventType":["CreatedEvent"]},
-	StatusFrequency:1,
-	URL:"http://" + require("os").hostname() + ":" + serviceOptions.port + serviceOptions.path}
-})
+// https://msdn.microsoft.com/en-us/library/office/aa566188
+var ewsConfig = {
+	PushSubscriptionRequest:{
+		FolderIds:{
+			DistinguishedFolderId:{
+				attributes:{
+					Id:"inbox"
+				}
+			}
+		},
+		EventTypes:{
+			EventType:["CreatedEvent"]
+		},
+		StatusFrequency:1,
+		// subscription notifications will be sent to our listener service
+		URL:"http://" + require("os").hostname() + ":" + serviceOptions.port + serviceOptions.path
+	}
+};
+ews.run("Subscribe",ewsConfig);
 ```
 
 ### Office 365
