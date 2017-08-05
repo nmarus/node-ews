@@ -5,56 +5,43 @@
 npm install node-ews
 ```
 
-#### Updates in patch 3.1.0 (new)
-- Merged PR #46 to add support for bearer auth.
-
-#### Updates in patch 3.0.6
-- Addressed issues in PR #38, cleaned up code.
-- Merged PR for issues #37
-- Merged PR for issues #36 to fix typo in 3.0.2
-- Merged PR for issues #34 to fix typo in 3.0.1
-- Applied temporary fix for Issue #17 by pointing node-soap reference in package.json to modified fork.
-
-#### Updates in version 3.0.0
-
-- Resolved issue #31 (courtesy of @eino-makitalo)
-- Resolved issue #29
-- Updated docs to reflect issue discovered in #26
-- Resolved issue #20 #15 with added basic-auth functionality
-- Updated README to include Office 365 connection example and notes on basic-auth
-- The EWS constructor now requires authentication (username, password, host) inside config object. See updated examples below. **Note: This is a breaking change from the method used in version 2.x!**
-- The temp file is now specified in the EWS config object. See updated examples below. **Note: This is a breaking change from the method used in version 2.x!**
+#### Updates in 3.1.1 (new)
+- Reverted back to official soap library to address workaround in issue #17
+- Added Notifications from PR #50 (See example 5)
+- Code cleanup
 
 #### About
-A extension of node-soap with httpntlm to make queries to Microsoft's Exchange Web Service API work.
+A extension of node-soap with httpntlm to make queries to Microsoft's Exchange
+Web Service API work. Utilize node-soap for json to xml query processing and
+returns responses as json objects.
 
 ##### Features:
-- Assumes NTLM Authentication over HTTPs (basic and bearer auth **now** supported)
+- Supports NTLM, Basic, or Bearer Authentication.
 - Connects to configured EWS Host and downloads it's WSDL file so it might be concluded that this is "fairly" version agnostic
-- After downloading the  WSDL file, the wrapper dynamically exposes all EWS SOAP functions
-- Attempts to standardize Microsoft's  WSDL by modifying the file to include missing service name, port, and bindings
+- After downloading the WSDL file, the wrapper dynamically exposes all EWS SOAP functions
+- Attempts to standardize Microsoft's WSDL by modifying the file to include missing service name, port, and bindings
 - This DOES NOT work with anything Microsoft Documents as using the EWS Managed API.
 
 #### Example 1: Get Exchange Distribution List Members Using ExpandDL
 ###### https://msdn.microsoft.com/EN-US/library/office/aa564755.aspx
 ```js
-var EWS = require('node-ews');
+const EWS = require('node-ews');
 
 // exchange server connection info
-var ewsConfig = {
+let ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-var ews = new EWS(ewsConfig);
+let ews = new EWS(ewsConfig);
 
 // define ews api function
-var ewsFunction = 'ExpandDL';
+let ewsFunction = 'ExpandDL';
 
 // define ews api function args
-var ewsArgs = {
+let ewsArgs = {
   'Mailbox': {
     'EmailAddress':'publiclist@domain.com'
   }
@@ -73,23 +60,23 @@ ews.run(ewsFunction, ewsArgs)
 #### Example 2: Setting OOO Using SetUserOofSettings
 ###### https://msdn.microsoft.com/en-us/library/office/aa580294.aspx
 ```js
-var EWS = require('node-ews');
+const EWS = require('node-ews');
 
 // exchange server connection info
-var ewsConfig = {
+let ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-var ews = new EWS(ewsConfig);
+let ews = new EWS(ewsConfig);
 
 // define ews api function
-var ewsFunction = 'SetUserOofSettings';
+let ewsFunction = 'SetUserOofSettings';
 
 // define ews api function args
-var ewsArgs = {
+let ewsArgs = {
   'Mailbox': {
     'Address':'email@somedomain.com'
   },
@@ -122,23 +109,23 @@ ews.run(ewsFunction, ewsArgs)
 #### Example 3: Getting OOO Using GetUserOofSettings
 ###### https://msdn.microsoft.com/en-us/library/office/aa563465.aspx
 ```js
-var EWS = require('node-ews');
+const EWS = require('node-ews');
 
 // exchange server connection info
-var ewsConfig = {
+let ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-var ews = new EWS(ewsConfig);
+let ews = new EWS(ewsConfig);
 
 // define ews api function
-var ewsFunction = 'GetUserOofSettings';
+let ewsFunction = 'GetUserOofSettings';
 
 // define ews api function args
-var ewsArgs = {
+let ewsArgs = {
   'Mailbox': {
     'Address':'email@somedomain.com'
   }
@@ -158,23 +145,23 @@ ews.run(ewsFunction, ewsArgs)
 ##### https://msdn.microsoft.com/en-us/library/office/aa566468
 
 ```js
-var EWS = require('node-ews');
+const EWS = require('node-ews');
 
 // exchange server connection info
-var ewsConfig = {
+let ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-var ews = new EWS(ewsConfig);
+let ews = new EWS(ewsConfig);
 
 // define ews api function
-var ewsFunction = 'CreateItem';
+let ewsFunction = 'CreateItem';
 
 // define ews api function args
-var ewsArgs = {
+let ewsArgs = {
   "attributes" : {
     "MessageDisposition" : "SendAndSaveCopy"
   },
@@ -216,51 +203,53 @@ ews.run(ewsFunction, ewsArgs)
 ```
 
 #### Example 5: Creating a Push Notification Service Listener
-```// specify listener service options
-var serviceOptions = {
-	port:8080, // defaults to port 8000
-	path:"/", // defaults to "/notification"
-	// If you do not have NotificationService.wsdl it can be found via a quick Google search
-	xml:fs.readFileSync("NotificationService.wsdl", 'utf8') // the xml field is required
+
+```js
+// specify listener service options
+let serviceOptions = {
+  port: 8080, // defaults to port 8000
+  path: '/', // defaults to '/notification'
+  // If you do not have NotificationService.wsdl it can be found via a quick Google search
+  xml:fs.readFileSync('NotificationService.wsdl', 'utf8') // the xml field is required
 };
 
 // create the listener service
-ews.notificationService(serviceOptions, function(response){
-	console.log(new Date().toISOString(),"| Received EWS Push Notification");
-	console.log(new Date().toISOString(),"| Response:",JSON.stringify(response));
-	//Do something with response
-	return {SendNotificationResult:{SubscriptionStatus:"OK"}}; // respond with "OK" to keep subscription alive
-	//return {SendNotificationResult:{SubscriptionStatus:"UNSUBSCRIBE"}}; // respond with "UNSUBSCRIBE" to unsubscribe
-})
+ews.notificationService(serviceOptions, function(response) {
+  console.log(new Date().toISOString(), '| Received EWS Push Notification');
+  console.log(new Date().toISOString(), '| Response:', JSON.stringify(response));
+  // Do something with response
+  return {SendNotificationResult: { SubscriptionStatus: 'OK' } }; // respond with 'OK' to keep subscription alive
+  // return {SendNotificationResult: { SubscriptionStatus: 'UNSUBSCRIBE' } }; // respond with 'UNSUBSCRIBE' to unsubscribe
+});
 
-// the soap.listen object is passed through the promise so you can optionally use the .log() functionality
+// The soap.listen object is passed through the promise so you can optionally use the .log() functionality
 // https://github.com/vpulim/node-soap#server-logging
 .then(server => {
-	server.log = function(type, data) {
-		console.log(new Date().toISOString(),"| ",type,':',data);
-	};
+  server.log = function(type, data) {
+    console.log(new Date().toISOString(), '| ', type, ':', data);
+  };
 });
 
 // create a push notification subscription
 // https://msdn.microsoft.com/en-us/library/office/aa566188
-var ewsConfig = {
-	PushSubscriptionRequest:{
-		FolderIds:{
-			DistinguishedFolderId:{
-				attributes:{
-					Id:"inbox"
-				}
-			}
-		},
-		EventTypes:{
-			EventType:["CreatedEvent"]
-		},
-		StatusFrequency:1,
-		// subscription notifications will be sent to our listener service
-		URL:"http://" + require("os").hostname() + ":" + serviceOptions.port + serviceOptions.path
-	}
+let ewsConfig = {
+  PushSubscriptionRequest: {
+    FolderIds: {
+      DistinguishedFolderId: {
+        attributes: {
+          Id: 'inbox'
+        }
+      }
+    },
+    EventTypes: {
+      EventType: ['CreatedEvent']
+    },
+    StatusFrequency: 1,
+    // subscription notifications will be sent to our listener service
+    URL: 'http://' + require('os').hostname() + ':' + serviceOptions.port + serviceOptions.path
+  }
 };
-ews.run("Subscribe",ewsConfig);
+ews.run('Subscribe', ewsConfig);
 ```
 
 ### Office 365
@@ -268,10 +257,10 @@ ews.run("Subscribe",ewsConfig);
 Below is a template that works with Office 365.
 
 ```js
-var EWS = require('node-ews');
+const EWS = require('node-ews');
 
 // exchange server connection info
-var ewsConfig = {
+let ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://outlook.office365.com',
@@ -279,13 +268,13 @@ var ewsConfig = {
 };
 
 // initialize node-ews
-var ews = new EWS(ewsConfig);
+let ews = new EWS(ewsConfig);
 
 // define ews api function
-var ewsFunction = 'ExpandDL';
+let ewsFunction = 'ExpandDL';
 
 // define ews api function args
-var ewsArgs = {
+let ewsArgs = {
   'Mailbox': {
     'EmailAddress':'publiclist@domain.com'
   }
@@ -308,30 +297,30 @@ ews.run(ewsFunction, ewsArgs)
 To add an optional soap header to the Exchange Web Services request, you can pass an optional 3rd variable to the ews.run() function as demonstrated by the following:
 
 ```js
-var EWS = require('node-ews');
+const EWS = require('node-ews');
 
 // exchange server connection info
-var ewsConfig = {
+let ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-var ews = new EWS(ewsConfig);
+let ews = new EWS(ewsConfig);
 
 // define ews api function
-var ewsFunction = 'GetUserOofSettings';
+let ewsFunction = 'GetUserOofSettings';
 
 // define ews api function args
-var ewsArgs = {
+let ewsArgs = {
   'Mailbox': {
     'Address':'email@somedomain.com'
   }
 };
 
 // define custom soap header
-var ewsSoapHeader = {
+let ewsSoapHeader = {
   't:RequestServerVersion': {
     attributes: {
       Version: "Exchange2013"
@@ -354,7 +343,7 @@ ews.run(ewsFunction, ewsArgs, ewsSoapHeader)
 
 ```js
 // exchange server connection info
-var ewsConfig = {
+let ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com',
@@ -362,14 +351,14 @@ var ewsConfig = {
 };
 
 // initialize node-ews
-var ews = new EWS(ewsConfig);
+let ews = new EWS(ewsConfig);
 ```
 
 #### Enable Bearer Auth instead of NTLM:
 
 ```js
 // exchange server connection info
-var ewsConfig = {
+let ewsConfig = {
   username: 'myuser@domain.com',
   token: 'oauth_token...',
   host: 'https://ews.domain.com',
@@ -377,7 +366,7 @@ var ewsConfig = {
 };
 
 // initialize node-ews
-var ews = new EWS(ewsConfig);
+let ews = new EWS(ewsConfig);
 ```
 
 #### Disable SSL verification:
@@ -387,24 +376,24 @@ To disable SSL authentication modify the above examples with the following:
 **Basic and Bearer Auth**
 
 ```js
-var options = {
+let options = {
  rejectUnauthorized: false,
  strictSSL: false
 };
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-var ews = new EWS(config, options);
+let ews = new EWS(config, options);
 ```
 
 **NTLM**
 
 ```js
-var options = {
+let options = {
  strictSSL: false
 };
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-var ews = new EWS(config, options);
+let ews = new EWS(config, options);
 ```
 
 #### Specify Temp Directory:
@@ -415,7 +404,7 @@ To override this behavior and use a persistent folder add the following to your 
 
 ```js
 // exchange server connection info
-var ewsConfig = {
+let ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com',
@@ -423,7 +412,7 @@ var ewsConfig = {
 };
 
 // initialize node-ews
-var ews = new EWS(ewsConfig);
+let ews = new EWS(ewsConfig);
 ```
 
 # Constructing the ewsArgs JSON Object
