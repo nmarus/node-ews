@@ -5,7 +5,7 @@
 npm install node-ews
 ```
 
-#### Updates in 3.1.1 (new)
+#### Updates in 3.2.0 (new)
 - Reverted back to official soap library to address workaround in issue #17
 - Added Notifications from PR #50 (See example 5)
 - Code cleanup
