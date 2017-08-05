@@ -215,6 +215,54 @@ ews.run(ewsFunction, ewsArgs)
   });
 ```
 
+#### Example 5: Creating a Push Notification Service Listener
+```// specify listener service options
+var serviceOptions = {
+	port:8080, // defaults to port 8000
+	path:"/", // defaults to "/notification"
+	// If you do not have NotificationService.wsdl it can be found via a quick Google search
+	xml:fs.readFileSync("NotificationService.wsdl", 'utf8') // the xml field is required
+};
+
+// create the listener service
+ews.notificationService(serviceOptions, function(response){
+	console.log(new Date().toISOString(),"| Received EWS Push Notification");
+	console.log(new Date().toISOString(),"| Response:",JSON.stringify(response));
+	//Do something with response
+	return {SendNotificationResult:{SubscriptionStatus:"OK"}}; // respond with "OK" to keep subscription alive
+	//return {SendNotificationResult:{SubscriptionStatus:"UNSUBSCRIBE"}}; // respond with "UNSUBSCRIBE" to unsubscribe
+})
+
+// the soap.listen object is passed through the promise so you can optionally use the .log() functionality
+// https://github.com/vpulim/node-soap#server-logging
+.then(server => {
+	server.log = function(type, data) {
+		console.log(new Date().toISOString(),"| ",type,':',data);
+	};
+});
+
+// create a push notification subscription
+// https://msdn.microsoft.com/en-us/library/office/aa566188
+var ewsConfig = {
+	PushSubscriptionRequest:{
+		FolderIds:{
+			DistinguishedFolderId:{
+				attributes:{
+					Id:"inbox"
+				}
+			}
+		},
+		EventTypes:{
+			EventType:["CreatedEvent"]
+		},
+		StatusFrequency:1,
+		// subscription notifications will be sent to our listener service
+		URL:"http://" + require("os").hostname() + ":" + serviceOptions.port + serviceOptions.path
+	}
+};
+ews.run("Subscribe",ewsConfig);
+```
+
 ### Office 365
 
 Below is a template that works with Office 365.
