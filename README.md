@@ -28,20 +28,20 @@ returns responses as json objects.
 const EWS = require('node-ews');
 
 // exchange server connection info
-let ewsConfig = {
+const ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-let ews = new EWS(ewsConfig);
+const ews = new EWS(ewsConfig);
 
 // define ews api function
-let ewsFunction = 'ExpandDL';
+const ewsFunction = 'ExpandDL';
 
 // define ews api function args
-let ewsArgs = {
+const ewsArgs = {
   'Mailbox': {
     'EmailAddress':'publiclist@domain.com'
   }
@@ -63,20 +63,20 @@ ews.run(ewsFunction, ewsArgs)
 const EWS = require('node-ews');
 
 // exchange server connection info
-let ewsConfig = {
+const ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-let ews = new EWS(ewsConfig);
+const ews = new EWS(ewsConfig);
 
 // define ews api function
-let ewsFunction = 'SetUserOofSettings';
+const ewsFunction = 'SetUserOofSettings';
 
 // define ews api function args
-let ewsArgs = {
+const ewsArgs = {
   'Mailbox': {
     'Address':'email@somedomain.com'
   },
@@ -112,20 +112,20 @@ ews.run(ewsFunction, ewsArgs)
 const EWS = require('node-ews');
 
 // exchange server connection info
-let ewsConfig = {
+const ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-let ews = new EWS(ewsConfig);
+const ews = new EWS(ewsConfig);
 
 // define ews api function
-let ewsFunction = 'GetUserOofSettings';
+const ewsFunction = 'GetUserOofSettings';
 
 // define ews api function args
-let ewsArgs = {
+const ewsArgs = {
   'Mailbox': {
     'Address':'email@somedomain.com'
   }
@@ -148,20 +148,20 @@ ews.run(ewsFunction, ewsArgs)
 const EWS = require('node-ews');
 
 // exchange server connection info
-let ewsConfig = {
+const ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-let ews = new EWS(ewsConfig);
+const ews = new EWS(ewsConfig);
 
 // define ews api function
-let ewsFunction = 'CreateItem';
+const ewsFunction = 'CreateItem';
 
 // define ews api function args
-let ewsArgs = {
+const ewsArgs = {
   "attributes" : {
     "MessageDisposition" : "SendAndSaveCopy"
   },
@@ -206,7 +206,7 @@ ews.run(ewsFunction, ewsArgs)
 
 ```js
 // specify listener service options
-let serviceOptions = {
+const serviceOptions = {
   port: 8080, // defaults to port 8000
   path: '/', // defaults to '/notification'
   // If you do not have NotificationService.wsdl it can be found via a quick Google search
@@ -232,7 +232,7 @@ ews.notificationService(serviceOptions, function(response) {
 
 // create a push notification subscription
 // https://msdn.microsoft.com/en-us/library/office/aa566188
-let ewsConfig = {
+const ewsConfig = {
   PushSubscriptionRequest: {
     FolderIds: {
       DistinguishedFolderId: {
@@ -260,7 +260,7 @@ Below is a template that works with Office 365.
 const EWS = require('node-ews');
 
 // exchange server connection info
-let ewsConfig = {
+const ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://outlook.office365.com',
@@ -268,13 +268,13 @@ let ewsConfig = {
 };
 
 // initialize node-ews
-let ews = new EWS(ewsConfig);
+const ews = new EWS(ewsConfig);
 
 // define ews api function
-let ewsFunction = 'ExpandDL';
+const ewsFunction = 'ExpandDL';
 
 // define ews api function args
-let ewsArgs = {
+const ewsArgs = {
   'Mailbox': {
     'EmailAddress':'publiclist@domain.com'
   }
@@ -300,27 +300,27 @@ To add an optional soap header to the Exchange Web Services request, you can pas
 const EWS = require('node-ews');
 
 // exchange server connection info
-let ewsConfig = {
+const ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com'
 };
 
 // initialize node-ews
-let ews = new EWS(ewsConfig);
+const ews = new EWS(ewsConfig);
 
 // define ews api function
-let ewsFunction = 'GetUserOofSettings';
+const ewsFunction = 'GetUserOofSettings';
 
 // define ews api function args
-let ewsArgs = {
+const ewsArgs = {
   'Mailbox': {
     'Address':'email@somedomain.com'
   }
 };
 
 // define custom soap header
-let ewsSoapHeader = {
+const ewsSoapHeader = {
   't:RequestServerVersion': {
     attributes: {
       Version: "Exchange2013"
@@ -339,11 +339,36 @@ ews.run(ewsFunction, ewsArgs, ewsSoapHeader)
 
 ```
 
+#### Use Encrypted Credentials for NTLM:
+This allows you to persist their password as separate hashes instead of as plain text.
+This utilizes the [options](https://github.com/SamDecrock/node-http-ntlm#options) available to the underlying NTLM lib.
+[Here](https://github.com/SamDecrock/node-http-ntlm#pre-encrypt-the-password) is an example from its README.
+Below is an example for this lib:
+```js
+const NTLMAuth = require('httpntlm').ntlm;
+const passwordPlainText = 'mypassword';
+
+// store the ntHashedPassword and lmHashedPassword to reuse later for reconnecting
+const ntHashedPassword = NTLMAuth.create_NT_hashed_password(passwordPlainText);
+const lmHashedPassword = NTLMAuth.create_LM_hashed_password(passwordPlainText);
+
+// exchange server connection info
+const ewsConfig = {
+    username: 'myuser@domain.com',
+    nt_password: ntHashedPassword,
+    lm_password: lmHashedPassword,
+    host: 'https://ews.domain.com'
+};
+
+// initialize node-ews
+const ews = new EWS(ewsConfig);
+```
+
 #### Enable Basic Auth instead of NTLM:
 
 ```js
 // exchange server connection info
-let ewsConfig = {
+const ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com',
@@ -351,14 +376,14 @@ let ewsConfig = {
 };
 
 // initialize node-ews
-let ews = new EWS(ewsConfig);
+const ews = new EWS(ewsConfig);
 ```
 
 #### Enable Bearer Auth instead of NTLM:
 
 ```js
 // exchange server connection info
-let ewsConfig = {
+const ewsConfig = {
   username: 'myuser@domain.com',
   token: 'oauth_token...',
   host: 'https://ews.domain.com',
@@ -366,7 +391,7 @@ let ewsConfig = {
 };
 
 // initialize node-ews
-let ews = new EWS(ewsConfig);
+const ews = new EWS(ewsConfig);
 ```
 
 #### Disable SSL verification:
@@ -376,24 +401,24 @@ To disable SSL authentication modify the above examples with the following:
 **Basic and Bearer Auth**
 
 ```js
-let options = {
+const options = {
  rejectUnauthorized: false,
  strictSSL: false
 };
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-let ews = new EWS(config, options);
+const ews = new EWS(config, options);
 ```
 
 **NTLM**
 
 ```js
-let options = {
+const options = {
  strictSSL: false
 };
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-let ews = new EWS(config, options);
+const ews = new EWS(config, options);
 ```
 
 #### Specify Temp Directory:
@@ -404,7 +429,7 @@ To override this behavior and use a persistent folder add the following to your 
 
 ```js
 // exchange server connection info
-let ewsConfig = {
+const ewsConfig = {
   username: 'myuser@domain.com',
   password: 'mypassword',
   host: 'https://ews.domain.com',
@@ -412,7 +437,7 @@ let ewsConfig = {
 };
 
 // initialize node-ews
-let ews = new EWS(ewsConfig);
+const ews = new EWS(ewsConfig);
 ```
 
 # Constructing the ewsArgs JSON Object
