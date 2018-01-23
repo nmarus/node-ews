@@ -24,6 +24,7 @@ returns responses as json objects.
 - After downloading the WSDL file, the wrapper dynamically exposes all EWS SOAP functions
 - Attempts to standardize Microsoft's WSDL by modifying the file to include missing service name, port, and bindings
 - This DOES NOT work with anything Microsoft Documents as using the EWS Managed API.
+- When using NTLMv2 you have to you your Windows username and not your email address
 
 #### Example 1: Get Exchange Distribution List Members Using ExpandDL
 ###### https://msdn.microsoft.com/EN-US/library/office/aa564755.aspx
