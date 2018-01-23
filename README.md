@@ -5,18 +5,21 @@
 npm install node-ews
 ```
 
+#### Updates in 3.4.0 (new)
+- Use ntlm-client to enable NTLMv2
+
 #### Updates in 3.2.0 (new)
 - Reverted back to official soap library to address workaround in issue #17
 - Added Notifications from PR #50 (See example 5)
 - Code cleanup
 
 #### About
-A extension of node-soap with httpntlm to make queries to Microsoft's Exchange
+A extension of node-soap with ntlm-client to make queries to Microsoft's Exchange
 Web Service API work. Utilize node-soap for json to xml query processing and
 returns responses as json objects.
 
 ##### Features:
-- Supports NTLM, Basic, or Bearer Authentication.
+- Supports NTLMv1, NTLMv2, Basic, or Bearer Authentication.
 - Connects to configured EWS Host and downloads it's WSDL file so it might be concluded that this is "fairly" version agnostic
 - After downloading the WSDL file, the wrapper dynamically exposes all EWS SOAP functions
 - Attempts to standardize Microsoft's WSDL by modifying the file to include missing service name, port, and bindings
@@ -337,31 +340,6 @@ ews.run(ewsFunction, ewsArgs, ewsSoapHeader)
     console.log(err.stack);
   });
 
-```
-
-#### Use Encrypted Credentials for NTLM:
-This allows you to persist their password as separate hashes instead of as plain text.
-This utilizes the [options](https://github.com/SamDecrock/node-http-ntlm#options) available to the underlying NTLM lib.
-[Here](https://github.com/SamDecrock/node-http-ntlm#pre-encrypt-the-password) is an example from its README.
-Below is an example for this lib:
-```js
-const NTLMAuth = require('httpntlm').ntlm;
-const passwordPlainText = 'mypassword';
-
-// store the ntHashedPassword and lmHashedPassword to reuse later for reconnecting
-const ntHashedPassword = NTLMAuth.create_NT_hashed_password(passwordPlainText);
-const lmHashedPassword = NTLMAuth.create_LM_hashed_password(passwordPlainText);
-
-// exchange server connection info
-const ewsConfig = {
-    username: 'myuser@domain.com',
-    nt_password: ntHashedPassword,
-    lm_password: lmHashedPassword,
-    host: 'https://ews.domain.com'
-};
-
-// initialize node-ews
-const ews = new EWS(ewsConfig);
 ```
 
 #### Enable Basic Auth instead of NTLM:
