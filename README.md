@@ -1,3 +1,7 @@
+[![Known Vulnerabilities](https://snyk.io//test/github/MatejMalicek/node-ews/badge.svg?targetFile=converter/package.json)](https://snyk.io//test/github/MatejMalicek/node-ews?targetFile=converter/package.json)
+
+Updated to v 3.2.5 on 4 September 2019 - vulnerable dependencies fixed.
+
 # node-ews
 ###### A simple JSON wrapper for the Exchange Web Services (EWS) SOAP API
 
