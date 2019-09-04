@@ -4,16 +4,16 @@
   "description": "A simple JSON wrapper for the Exchange Web Services (EWS) SOAP API",
   "main": "./index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "snyk test"
   },
   "author": "Nicholas Marus",
   "license": "MIT",
   "dependencies": {
-    "debug": "2.3.3",
+    "debug": "^2.6.9",
     "httpntlm": "1.7.3",
-    "lodash": "4.17.2",
-    "request": "2.79.0",
-    "soap": "0.22.0",
+    "lodash": "^4.17.12",
+    "request": "^2.82.0",
+    "soap": "^0.24.0",
     "tmp": "0.0.28",
     "when": "3.7.7"
   },
@@ -34,5 +34,8 @@
   "bugs": {
     "url": "https://github.com/cumberlandgroup/node-ews/issues"
   },
-  "homepage": "https://github.com/cumberlandgroup/node-ews#readme"
+  "homepage": "https://github.com/cumberlandgroup/node-ews#readme",
+  "devDependencies": {
+    "snyk": "^1.224.0"
+  }
 }
