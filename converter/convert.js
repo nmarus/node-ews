@@ -1,5 +1,4 @@
 var xml2js = require('xml2js');
-var when = require('when');
 var _ = require('lodash');
 
 var util = require('util');
@@ -26,7 +25,7 @@ function convert(xml) {
     ]
   });
 
-  return when.promise((resolve, reject) => {
+  return await promise((resolve, reject) => {
     parser.parseString(xml, (err, result) => {
       if(err) reject(err);
       else {
