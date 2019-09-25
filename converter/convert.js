@@ -25,7 +25,7 @@ function convert(xml) {
     ]
   });
 
-  return await promise((resolve, reject) => {
+  return promise((resolve, reject) => {
     parser.parseString(xml, (err, result) => {
       if(err) reject(err);
       else {
