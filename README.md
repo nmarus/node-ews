@@ -220,7 +220,7 @@ ews.notificationService(serviceOptions, function(response) {
   // Do something with response
   return {SendNotificationResult: { SubscriptionStatus: 'OK' } }; // respond with 'OK' to keep subscription alive
   // return {SendNotificationResult: { SubscriptionStatus: 'UNSUBSCRIBE' } }; // respond with 'UNSUBSCRIBE' to unsubscribe
-})
+});
 
 // The soap.listen object is passed through the promise so you can optionally use the .log() functionality
 // https://github.com/vpulim/node-soap#server-logging
