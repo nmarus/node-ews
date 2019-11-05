@@ -9,12 +9,13 @@
   "author": "Nicholas Marus",
   "license": "MIT",
   "dependencies": {
-    "debug": "4.1.1",
-    "httpntlm": "1.7.6",
-    "lodash": "4.17.11",
-    "request": "2.88.0",
-    "soap": "0.26.0",
-    "tmp": "0.0.33"
+    "debug": "2.3.3",
+    "httpntlm": "1.7.3",
+    "lodash": "4.17.2",
+    "request": "2.79.0",
+    "soap": "0.22.0",
+    "tmp": "0.0.28",
+    "when": "3.7.7"
   },
   "repository": {
     "type": "git",
