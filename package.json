@@ -9,9 +9,9 @@
   "author": "Nicholas Marus",
   "license": "MIT",
   "dependencies": {
-    "debug": "2.3.3",
+    "debug": "2.6.9",
     "httpntlm": "1.7.3",
-    "lodash": "4.17.2",
+    "lodash": "4.17.13",
     "request": "2.79.0",
     "soap": "0.22.0",
     "tmp": "0.0.28",
