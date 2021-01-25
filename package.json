@@ -11,7 +11,7 @@
   "dependencies": {
     "debug": "4.1.1",
     "httpntlm": "1.7.3",
-    "lodash": "4.17.15",
+    "lodash": "4.17.20",
     "request": "^2.88.0",
     "soap": "^0.30.0",
     "tmp": "0.0.28",
