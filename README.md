@@ -1,3 +1,6 @@
+### NOTE: This REPO is no longer being actively maintained.
+### =====================================
+
 # node-ews
 ###### A simple JSON wrapper for the Exchange Web Services (EWS) SOAP API
 
