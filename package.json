@@ -1,6 +1,6 @@
 {
   "name": "node-ews",
-  "version": "3.4.2",
+  "version": "3.4.3",
   "description": "A simple JSON wrapper for the Exchange Web Services (EWS) SOAP API",
   "main": "./index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "debug": "4.1.1",
-    "httpntlm": "1.7.3",
+    "httpntlm": "~1.7.7",
     "lodash": "4.17.21",
     "request": "^2.88.0",
     "soap": "^0.30.0",
